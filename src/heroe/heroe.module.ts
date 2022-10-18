@@ -13,14 +13,18 @@ import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Heroe, HeroeSchema } from 'src/schecmas/heroe.schema';
 import { Comic, ComicSchema } from 'src/schecmas/comic.schema';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { HeroeEntity } from 'src/entity/heroe.entity';
+import { ComicEntity } from 'src/entity/comic.entity';
 
 @Module({
   imports: [ConfigModule,
     HttpModule,
     MongooseModule.forFeature([
       { name: Heroe.name, schema: HeroeSchema },
-      { name: Comic.name, schema: ComicSchema },
-    ]),],
+      { name: Comic.name, schema: ComicSchema }, 
+    ]),
+    TypeOrmModule.forFeature([HeroeEntity, ComicEntity]),],
   controllers: [HeroeController],
   providers: [MarvelHeroesService, HeroeSQLService, HeroeNoSQLService],
 })

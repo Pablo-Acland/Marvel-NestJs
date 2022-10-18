@@ -24,9 +24,14 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
     ) {}
   
     @Get('/nosql/:id')
-    getCharacterByIdFromMongo(@Param('id', ParseIntPipe) id: number) {
+    getHeroeByIdNoSql(@Param('id', ParseIntPipe) id: number) {
       return this.heroeNoSQLService.getHeroebyId(id);
     }
+
+    @Get('/sql')
+    getHeroesOfSql() {
+    return this.heroeSQLService.getHeroes();
+  }
 
     @Get(':offset/:limit')
     async findAll(
@@ -52,9 +57,9 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
        const heroe = await this.marvelHeroeService.getHeroeById(id);
        const heroeEntity= this.HeroeDteToHeroeEntity(heroe);
        const listComicsDto= await this.marvelHeroeService.getComicByHeroeId(heroe.id);
-
+       heroeEntity.comics= listComicsDto.map((comic)=>this.ComicDteToComicEntity(comic));
       // transformar heroe en lo que requiero guardar
-      this.heroeSQLService.save();
+      return this.heroeSQLService.save(heroeEntity);
     }
   
     @Put('nosql/:idHeroeExistente/:idNuevoHeroe')
@@ -76,6 +81,11 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
     deleteHeroeNoSQL(@Param('id') id: number) {
       return this.heroeNoSQLService.delete(id);
     }
+
+    @Delete('sql/:id')
+    deleteHeroeMySQL(@Param('id', ParseIntPipe) id: number) {
+    return this.heroeSQLService.delete(id);
+  }
 
     HeroeDteToHeroe(heroeDto): Heroe {
       const heroe = new Heroe();
@@ -101,7 +111,11 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
       const comic = new ComicEntity();
       comic.comicId= comicDto.id;
       comic.format= comicDto.format;
-      comic.description= comicDto.description;
+      comic.description= 'No hay Descripcion';
+      if(comicDto.descripcion){
+        comic.description= comicDto.description;
+      }
+      
       comic.title= comicDto.title;
       return comic;
     }
@@ -111,4 +125,7 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
       listComicDto.forEach((comic)=>comicList.push(this.ComicDteToComicEntity(comic)))
       return comicList;
     }
+
+
+
   }

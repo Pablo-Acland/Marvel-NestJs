@@ -13,7 +13,7 @@ export class HeroeEntity {
   heroId: number;
   @Column()
   name: string;
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
   description: string;
   @Column()
   image: string;

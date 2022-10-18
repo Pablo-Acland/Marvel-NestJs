@@ -11,7 +11,7 @@ import { CreateHeroesDto } from '../dto/create.heroe.dto';
 @Injectable()
 export class MarvelHeroesService {
 
-  private;
+  
   constructor(
     private readonly config: ConfigService,
     private readonly httpService: HttpService,
@@ -62,7 +62,11 @@ export class MarvelHeroesService {
             const heroeDto = new CreateHeroesDto();
             heroeDto.id = heroe2.id;
             heroeDto.name = heroe2.name;
-            heroeDto.description = heroe2.description;
+            heroeDto.description = 'No hay descripcion';
+            if(heroe2.descripcion){
+              heroeDto.description = heroe2.description;
+            }
+            
             heroeDto.image = `${heroe2.thumbnail.path}.${heroe2.thumbnail.extension}`;
           return heroeDto;
         }),
@@ -86,7 +90,10 @@ export class MarvelHeroesService {
             const comicDto = new CreateComicDto();
             comicDto.id = comic.id;
             comicDto.title = comic.title;
-            comicDto.description = comic.description;
+            comicDto.description = 'No hay Descripcion';
+            if(comic.description){
+              comicDto.description = comic.description;
+            }
             comicDto.format = comic.format;
             return comicDto;
           });

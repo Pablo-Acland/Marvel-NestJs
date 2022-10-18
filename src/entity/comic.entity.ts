@@ -12,7 +12,7 @@ export class ComicEntity {
   comicId: number;
   @Column()
   title: string;
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column()
   description: string;
   @Column()
   format: string;

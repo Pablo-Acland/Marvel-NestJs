@@ -22,7 +22,15 @@ export class HeroeNoSQLService {
   ) {}
   
   getHeroebyId(id: number): any {
-    return this.heroeModel.findOne({ heroId: id }).populate('comics');
+    const heroe = this.heroeModel.findOne({ heroId: id }).populate('comics');
+    if (!heroe) {
+      throw new BadRequestException('El heroe no existe');
+    }
+    return heroe;
+  }
+
+  getAllCharacters() {
+    return this.heroeModel.find().exec();
   }
 
   async save(heroe: Heroe): Promise<Heroe> {
@@ -55,7 +63,7 @@ export class HeroeNoSQLService {
   async delete(HeroId: number) {
     const heroe =  await this.heroeModel.findOne({ heroId: HeroId });
     if (!heroe) {
-      throw new BadRequestException('El usuario no existe');
+      throw new BadRequestException('El heroe no existe');
     }
     return heroe.delete();
   }
@@ -75,11 +83,8 @@ export class HeroeNoSQLService {
         map(async (res) => {
           const t = res.data.data.results.map(async (comic) => {
             const newComicDto = this.ComicToComicDto(comic);
-            // console.log(newComicDto);
 
-            const comic2 = await this.comicModel.findOne({
-              comicId: newComicDto.id,
-            });
+            const comic2 = await this.comicModel.findOne({comicId: newComicDto.id,});
             if (comic2) {
               return comic2;
             }

@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId, Query, Types } from 'mongoose';
-import { Comic } from './comic.schema';
+import { Document, ObjectId } from 'mongoose';
 
 export type HeroeDocument = Heroe & Document;
 
